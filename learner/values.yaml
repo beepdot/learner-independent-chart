@@ -1,0 +1,219 @@
+# Default values for learner.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.namespaceOverride Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+  namespaceOverride: ""
+
+## @param commonLabels Add labels to all the deployed resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+
+## @param namespaceOverride Override namespace for ZooKeeper resources
+## Useful when including ZooKeeper as a chart dependency, so it can be released into a different namespace than the parent
+##
+namespaceOverride: ""
+
+env:
+  ENV_NAME: "dev"
+  PORTAL_SERVICE_PORT: "http://player.ed.svc.cluster.local:3000"
+  SUNBIRD_KAFKA_URL: "http://kafka.kafka.svc.cluster.local:9092"
+  accesstoken:
+    publickey:
+      basepath: "/keys/"
+  actor_hostname: "actor-service"
+  api_actor_provider: "local"
+  background_actor_provider: "local"
+  bind_hostname: "0.0.0.0"
+  ekstep_api_base_url: "http://learning.knowlg.svc.cluster.local:8080/learning-service"
+  ekstep_authorization: "MYKEY"
+  feed_limit: 30
+  form_api_endpoint: "/plugin/v1/form/read"
+  google_captcha_mobile_private_key: ""
+  google_captcha_private_key: ""
+  isMultiDCEnabled: false
+  kafka_urls: "http://kafka.kafka.svc.cluster.local:9092"
+  learner_in_memory_cache_ttl: 600
+  notification_service_base_url: "http://notification-service.lern.svc.cluster.local:9000"
+  org_index_alias: "org_alias"
+  quartz_shadow_user_migration_timer: "0 0 1 1/1 * ? *"
+  sunbird_account_key: "MYKEY"
+  sunbird_account_name: "account"
+  sunbird_analytics_api_base_url: "http://analytics-service.obsrv.svc.cluster.local:9000"
+  sunbird_analytics_blob_account_key: "MYKEY"
+  sunbird_analytics_blob_account_name: "account"
+  sunbird_api_base_url: "http://knowledge-mw-service.knowlg.svc.cluster.local:5000"
+  sunbird_api_mgr_base_url: "http://knowledge-mw-service.knowlg.svc.cluster.local:5000"
+  sunbird_app_name: "sunbird"
+  sunbird_authorization: "MYKEY"
+  sunbird_cache_enable: true
+  sunbird_cassandra_consistency_level: "local_quorum"
+  sunbird_cassandra_host: "http://cassandra.cassandra.svc.cluster.local"
+  sunbird_cassandra_password: "passwod"
+  sunbird_cassandra_port: 9042
+  sunbird_cassandra_username: "admin"
+  sunbird_cert_service_base_url: "http://cert-service.lern.svc.cluster.local:9000"
+  sunbird_cloud_service_provider: "azure"
+  sunbird_content_azure_storage_container: "container"
+  sunbird_course_batch_notification_enabled: true
+  sunbird_course_batch_notification_signature: "sunbird"
+  sunbird_course_metrics_base_url: "http://sunbird.org/auth"
+  sunbird_cs_base_url: "http://knowledge-mw-service.knowlg.svc.cluster.local:5000"
+  sunbird_cs_search_path: "/v1/content/search"
+  sunbird_default_channel: "sunbird"
+  sunbird_email_max_recipients_limit: 100
+  sunbird_encryption_key: "MYKEY"
+  sunbird_encryption_mode: "local"
+  sunbird_env_logo_url: "http://sunbird.org"
+  sunbird_environment: "dev"
+  sunbird_es_host: "http://elasticsearch.elasticsearch.svc.cluster.local"
+  sunbird_es_port: 9300
+  sunbird_fuzzy_search_threshold: 0.5
+  sunbird_gzip_enable: true
+  sunbird_gzip_size_threshold: 262144
+  sunbird_health_check_enable: false
+  sunbird_installation: "sunbird"
+  sunbird_installation_display_name: "sunbirddev"
+  sunbird_installation_display_name_for_sms: "sunbird"
+  sunbird_installation_email: "sunbird"
+  sunbird_instance: "sunbird"
+  sunbird_keycloak_required_action_link_expiration_seconds: 2592000
+  sunbird_keycloak_user_federation_provider_id: "sunbird"
+  sunbird_mail_server_from_email: "sunbird"
+  sunbird_mail_server_host: "host.com"
+  sunbird_mail_server_password: "password"
+  sunbird_mail_server_port: 587
+  sunbird_mail_server_username: apikey
+  sunbird_msg_91_auth: "admin"
+  sunbird_msg_sender: "admin"
+  sunbird_mw_system_host: "learner-service"
+  sunbird_mw_system_port: 8088
+  sunbird_open_saber_bridge_enable: false
+  sunbird_otp_allowed_attempt: 2
+  sunbird_otp_expiration: 1800
+  sunbird_otp_length: 6
+  sunbird_pg_db: "quartz"
+  sunbird_pg_host: "postgresql.postgresql.svc.cluster.local"
+  sunbird_pg_password: "password"
+  sunbird_pg_port: 5432
+  sunbird_pg_user: "sunbirddev@dev-pg11"
+  sunbird_quartz_mode: "cluster"
+  sunbird_redis_host: "redis.redis.svc.cluster.local"
+  sunbird_redis_port: 6379
+  sunbird_registry_service_baseurl: "http://registry_registry.rc.svc.cluster.local:8080/"
+  sunbird_remote_bg_req_router_path: "akka.tcp://SunbirdMWSystem@actor-service:8088/user/BackgroundRequestRouter"
+  sunbird_remote_req_router_path: "akka.tcp://SunbirdMWSystem@actor-service:8088/user/RequestRouter"
+  sunbird_reset_pass_msg: "You have requested to reset password. Click on the link to set a password"
+  sunbird_search_service_api_base_url: "http://search-service.knowlg.svc.cluster.local:9000"
+  sunbird_sso_client_id: "lms"
+  sunbird_sso_client_secret: "admin"
+  sunbird_sso_lb_ip: "1.2.3.4"
+  sunbird_sso_password: "password"
+  sunbird_sso_publickey: "MYKEY"
+  sunbird_sso_realm: "sunbird"
+  sunbird_sso_url: "http://sunbird.org/auth"
+  sunbird_sso_username: "admin"
+  sunbird_subdomain_keycloak_base_url: "http://sunbird.org/auth"
+  sunbird_telemetry_base_url: "http://telemetry-service.obsrv.svc.cluster.local:9001"
+  sunbird_time_zone: "Asia/Kolkata"
+  sunbird_url_shortner_access_token: "http://url.com"
+  sunbird_url_shortner_enable: true
+  sunbird_user_bulk_upload_size: 1001
+  sunbird_user_cert_kafka_topic: "cert"
+  sunbird_user_profile_field_default_visibility: "private"
+  sunbird_web_url: "https://sunbird.org"
+  telemetry_pdata_id: "learner"
+  telemetry_pdata_pid: "learner-service"
+  telemetry_queue_threshold_value: 100
+  user_index_alias: "user_alias"
